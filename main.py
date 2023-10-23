@@ -25,7 +25,7 @@ class  Users(Base):
     email = Column(String, unique=True)
     password = Column(String)
     role_id = Column(Integer)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.now)
     deleted_at = Column(DateTime, nullable=True)
     
 Base.metadata.create_all(bind=engine)
@@ -36,7 +36,7 @@ class UserCreate(BaseModel):
     password: str
     role_id: int
 
-class UserResponse(BaseModel    ):
+class UserResponse(BaseModel):
     id: int
     name: str
     email: str
@@ -97,7 +97,7 @@ def delete_user(user_id: int):
         if db_user is None:
             raise HTTPException(status_code=404, detail="User not found")
         
-        db_user.deleted_at = datetime.utcnow()
+        db_user.deleted_at = datetime.now()
         session.commit()
         
         updated_user = session.query(Users).filter(Users.id == user_id).first()
